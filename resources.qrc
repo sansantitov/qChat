@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="chat">resources/images/qchat.png</file>
+        <file alias="setting">resources/images/qchat_setting.png</file>
+    </qresource>
+</RCC>
