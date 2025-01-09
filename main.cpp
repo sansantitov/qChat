@@ -27,21 +27,22 @@ int main(int argc, char *argv[])
 
     //окно настройки
     w.setting = new Setting();
-    while (true)
+    if (w.setting != nullptr)
     {
-        int ret = w.setting->exec();
-        if (ret == 2) {
-            w.close();
-            return 0;
+        while (true)
+        {
+            int ret = w.setting->exec();
+            if (ret == 2) {
+                w.close();
+                return 0;
+            }
+            if (ret == QDialog::Accepted) break;
         }
-        if (ret == QDialog::Accepted) break;
+        delete w.setting;
+        QString queryStr = w.model->query().executedQuery();
+        w.model->clear();
+        w.model->query().clear();
+        w.model->setQuery(queryStr);
     }
-    w.setting->deleteLater();
-
-    QString queryStr = w.model->query().executedQuery();
-    w.model->clear();
-    w.model->query().clear();
-    w.model->setQuery(queryStr);
-
     return a.exec();
 }
