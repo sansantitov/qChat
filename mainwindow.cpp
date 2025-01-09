@@ -106,18 +106,21 @@ void MainWindow::setShowHideActAdmin()
 void MainWindow::slotSetting()
 {
     setting = new Setting();
-    int ret;
-    while (true) {
-        ret = setting->exec();
-        if (ret == 2 || ret == QDialog::Accepted) break;
+    if (setting != nullptr)
+    {
+        int ret;
+        while (true) {
+            ret = setting->exec();
+            if (ret == 2 || ret == QDialog::Accepted) break;
+        }
+        if (ret == QDialog::Accepted) {
+            QString queryStr = model->query().executedQuery();
+            model->clear();
+            model->query().clear();
+            model->setQuery(queryStr);
+        }
+        delete setting;
     }
-    if (ret == QDialog::Accepted) {
-        QString queryStr = model->query().executedQuery();
-        model->clear();
-        model->query().clear();
-        model->setQuery(queryStr);
-    }
-    setting->deleteLater();
 
 }
 
@@ -126,31 +129,41 @@ void MainWindow::on_tableView_activated(const QModelIndex &index)
 {
     QString contraLogin = index.data(Qt::EditRole).toString();
     message = new Message();
-    message->setCurrentLogin(getCurrentLogin());
-    message->setContraLogin(contraLogin);
-    message->setIdCurrent(chat->findUserByLogin(getCurrentLogin()));
-    message->setIdContra(chat->findUserByLogin(contraLogin));
-    if (message->getIdContra() == 1) message->setWindowTitle(contraLogin);
-    else message->setWindowTitle(getCurrentLogin() + " <-> " +contraLogin);
-    message->setFilter();
-    message->exec();
-    message->deleteLater();
+    if (message != nullptr)
+    {
+        message->setCurrentLogin(getCurrentLogin());
+        message->setContraLogin(contraLogin);
+        message->setIdCurrent(chat->findUserByLogin(getCurrentLogin()));
+        message->setIdContra(chat->findUserByLogin(contraLogin));
+        if (message->getIdContra() == 1) message->setWindowTitle(contraLogin);
+        else message->setWindowTitle(getCurrentLogin() + " <-> " +contraLogin);
+        message->setFilter();
+        message->exec();
+        delete message;
+    }
 }
 
 
 void MainWindow::admMessagesSlot()
 {
     admMessages = new AdmMessages();
-    admMessages->setFilter();
-    admMessages->exec();
-    admMessages->deleteLater();
+    if (admMessages != nullptr)
+    {
+        admMessages->setFilter();
+        admMessages->exec();
+        delete admMessages;
+    }
+
 }
 
 void MainWindow::admUsersSlot()
 {
     admUsers = new AdmUsers();
-    admUsers->exec();
-    admUsers->deleteLater();
+    if (admUsers != nullptr)
+    {
+        admUsers->exec();
+        delete admUsers;
+    }
 }
 
 
